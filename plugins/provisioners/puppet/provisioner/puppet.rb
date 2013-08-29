@@ -122,7 +122,13 @@ module VagrantPlugins
           @machine.env.ui.info I18n.t("vagrant.provisioners.puppet.running_puppet",
                                       :manifest => config.manifest_file)
 
-          @machine.communicate.sudo(command) do |type, data|
+          # If we need to run puppet apply as a different user we should execute sudo -u <user>
+          if @run_as_user
+            sudo_opts = {"-u" => @run_as_user}
+          else
+            sudo_opts = {}
+          end
+          @machine.communicate.sudo(command, {:sudo_opts => sudo_opts}) do |type, data|
             if !data.empty?
               @machine.env.ui.info(data, :new_line => false, :prefix => false)
             end

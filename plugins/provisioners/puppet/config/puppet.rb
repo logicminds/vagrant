@@ -7,13 +7,14 @@ module VagrantPlugins
         attr_accessor :manifest_file
         attr_accessor :manifests_path
         attr_accessor :module_path
+        attr_accessor :run_as_user
         attr_accessor :options
         attr_accessor :temp_dir
         attr_accessor :working_directory
 
         def initialize
           super
-
+          @run_as_user       = UNSET_VALUE
           @hiera_config_path = UNSET_VALUE
           @manifest_file     = UNSET_VALUE
           @manifests_path    = UNSET_VALUE
@@ -26,7 +27,7 @@ module VagrantPlugins
 
         def finalize!
           super
-
+          @run_as_user       = UNSET_VALUE
           @hiera_config_path = nil if @hiera_config_path == UNSET_VALUE
           @manifest_file  = "default.pp" if @manifest_file == UNSET_VALUE
           @manifests_path = "manifests" if @manifests_path == UNSET_VALUE
